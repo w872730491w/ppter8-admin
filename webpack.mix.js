@@ -3,21 +3,17 @@ const mix = require('laravel-mix');
 require('laravel-mix-eslint');
 
 function resolve(dir) {
-  return path.join(
-    __dirname,
-    '/resources/js',
-    dir
-  );
+    return path.join(__dirname, '/resources/js', dir);
 }
 
 Mix.listen('configReady', webpackConfig => {
-  // Add "svg" to image loader test
-  const imageLoaderConfig = webpackConfig.module.rules.find(
-    rule =>
-      String(rule.test) ===
-      String(/(\.(png|jpe?g|gif|webp)$|^((?!font).)*\.svg$)/)
-  );
-  imageLoaderConfig.exclude = resolve('icons');
+    // Add "svg" to image loader test
+    const imageLoaderConfig = webpackConfig.module.rules.find(
+        rule =>
+            String(rule.test) ===
+            String(/(\.(png|jpe?g|gif|webp)$|^((?!font).)*\.svg$)/)
+    );
+    imageLoaderConfig.exclude = resolve('icons');
 });
 
 mix.webpackConfig(config);
@@ -33,40 +29,37 @@ mix.webpackConfig(config);
  |
  */
 
-mix
-  .js('resources/js/app.js', 'public/js')
-  .extract([
-    'vue',
-    'axios',
-    'vuex',
-    'vue-router',
-    'vue-i18n',
-    'element-ui',
-    'echarts',
-    'highlight.js',
-    'sortablejs',
-    'dropzone',
-    'xlsx',
-    'tui-editor',
-    'codemirror',
-  ])
-  .options({
-    processCssUrls: false,
-  })
-  .sass('resources/js/styles/index.scss', 'public/css/app.css', {
-    implementation: require('node-sass'),
-  });
+mix.js('resources/js/app.js', 'public/js')
+    .extract([
+        'vue',
+        'axios',
+        'vuex',
+        'vue-router',
+        'vue-i18n',
+        'element-ui',
+        'echarts',
+        'highlight.js',
+        'sortablejs',
+        'dropzone',
+        'xlsx',
+        'tui-editor',
+        'codemirror',
+    ])
+    .options({
+        processCssUrls: false,
+    })
+    .sass('resources/js/styles/index.scss', 'public/css/app.css', {
+        implementation: require('node-sass'),
+    });
 
 if (mix.inProduction()) {
-  mix.version();
+    mix.version();
 } else {
-  if (process.env.LARAVUE_USE_ESLINT === 'true') {
-    mix.eslint();
-  }
-  // Development settings
-  mix
-    .sourceMaps()
-    .webpackConfig({
-      devtool: 'cheap-eval-source-map', // Fastest for development
+    if (process.env.LARAVUE_USE_ESLINT === 'true') {
+        mix.eslint();
+    }
+    // Development settings
+    mix.sourceMaps().webpackConfig({
+        devtool: 'cheap-eval-source-map', // Fastest for development
     });
 }
